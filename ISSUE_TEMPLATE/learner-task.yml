@@ -1,6 +1,0 @@
-name: Student Task
-labels: ["good first issue"]
-body:
-  - type: markdown
-    attributes:
-      value: "This task is designed for learning."
