@@ -1,3 +1,10 @@
+#laravel files
+node_modules
+vendor
+.editorconfig
+.idea
+.gitattributes
+
 # Logs
 logs
 *.log
