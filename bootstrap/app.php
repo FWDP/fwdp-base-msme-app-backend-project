@@ -20,15 +20,15 @@ return Application::configure(basePath: dirname(__DIR__))
         */
         $middleware->alias([
             // AUTH
-//            'auth' => \App\Http\Middleware\Authenticate::class,
+            'auth' => App\Http\Middleware\Authenticate::class,
 
             // PASSPORT
-            'scope' => \Laravel\Passport\Http\Middleware\CheckToken::class,
-            'scopes' => \Laravel\Passport\Http\Middleware\CheckTokenForAnyScope::class,
+            'scope' => Laravel\Passport\Http\Middleware\CheckToken::class,
+            'scopes' => Laravel\Passport\Http\Middleware\CheckTokenForAnyScope::class,
 
             // CUSTOM
-            'role' => \App\Http\Middleware\RoleMiddleware::class,
-            'subscription.active' => \App\Modules\Membership\Http\Middleware\EnsureActiveSubscription::class,
+            'role' => App\Http\Middleware\RoleMiddleware::class,
+            'subscription.active' => App\Modules\Membership\Http\Middleware\EnsureActiveSubscription::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
