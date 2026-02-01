@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Modules\Membership\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
 
 class Subscription extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'plan_id',
@@ -29,12 +27,12 @@ class Subscription extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function plan()
+    public function plan(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(SubscriptionPlan::class, 'plan_id');
     }
@@ -75,18 +73,4 @@ class Subscription extends Model
             'end_date'   => now()->addDays($durationDays),
         ]);
     }
-
-    public function subscriptions()
-    {
-        return $this->hasMany(Subscription::class);
-    }
-
-    public function activeSubscription()
-    {
-        return $this->hasOne(Subscription::class)
-            ->whereIn('status', ['trial', 'active'])
-            ->whereDate('end_date', '>=', now())
-            ->latest();
-    }
-
 }

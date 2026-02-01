@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Modules\Membership\Http\Middleware;
 
-use App\Models\Subscription;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

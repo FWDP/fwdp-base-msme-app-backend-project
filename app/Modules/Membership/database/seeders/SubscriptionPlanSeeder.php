@@ -1,9 +1,9 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Modules\Membership\Database\Seeders;
 
+use App\Modules\Membership\Models\SubscriptionPlan;
 use Illuminate\Database\Seeder;
-use App\Models\SubscriptionPlan;
 
 class SubscriptionPlanSeeder extends Seeder
 {

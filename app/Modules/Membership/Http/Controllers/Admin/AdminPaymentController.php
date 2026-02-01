@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Modules\Membership\Http\Controllers\Admin;
 
-use App\Models\Payment;
-use App\Models\Subscription;
+use App\Http\Controllers\Controller;
+use App\Modules\Membership\Models\Payment;
+use App\Modules\Membership\Models\Subscription;
 use Illuminate\Http\Request;
 
 class AdminPaymentController extends Controller

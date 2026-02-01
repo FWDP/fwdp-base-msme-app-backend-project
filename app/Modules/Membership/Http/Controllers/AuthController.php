@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Modules\Membership\Http\Controllers;
 
-use App\Models\Subscription;
-use App\Models\SubscriptionPlan;
+use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Modules\Membership\Models\Subscription;
+use App\Modules\Membership\Models\SubscriptionPlan;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
