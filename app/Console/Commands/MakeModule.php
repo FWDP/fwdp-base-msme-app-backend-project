@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Command\Command as CommandAlias;
-use function Pest\Laravel\put;
 
 class MakeModule extends Command
 {
@@ -14,7 +13,7 @@ class MakeModule extends Command
      *
      * @var string
      */
-    protected $signature = 'make:module {name}';
+    protected $signature = 'make:module {name : The name of the module}';
 
     /**
      * The console command description.
@@ -82,8 +81,10 @@ class MakeModule extends Command
         <?php
          use Illuminate\Support\Facades\Route;
 
-         Route::prefix('{$this->argument('name')}')->group(function () {
+         Route::prefix('api')->group(function () {
+            Route::prefix('{$this->argument('name')}')->group(function () {
 
+            });
          });
         PHP;
     }
