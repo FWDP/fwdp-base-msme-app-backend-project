@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('subscription_plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->decimal('price',10,2)->default(0);
-            $table->enum('billing_cycle',['trial','monthly','yearly']);
+            $table->enum('billing_cycle', ['trial','monthly','yearly']);
             $table->integer('duration_days');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
