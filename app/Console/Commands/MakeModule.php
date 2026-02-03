@@ -70,7 +70,7 @@ class MakeModule extends Command
             contents: $providerContent);
 
         $this->info("Module {$name} module created successfully.");
-        $this->info("Remember to register the provider in bootstrap/app.php");
+        $this->info("Remember to register the provider in bootstrap/providers.php");
 
         return CommandAlias::SUCCESS;
     }
