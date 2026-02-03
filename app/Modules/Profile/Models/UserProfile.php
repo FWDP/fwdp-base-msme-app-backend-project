@@ -16,17 +16,6 @@ class UserProfile extends Model
         'avatar_url',
         'avatar_path'
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function profile()
-    {
-        return $this->hasOne(UserProfile::class);
-    }
-
     public function getAvatarAttribute()
     {
         if ($this->avatar_path)

@@ -25,8 +25,8 @@ class AdminProfileController extends Controller
         return $query->paginate(20);
     }
 
-    public function show(User $user)
+    public function show(Request $request, $id)
     {
-        return $user->load('profile');
+        return $request->user()->findOrFail($id)->profile;
     }
 }

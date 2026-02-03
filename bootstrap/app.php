@@ -19,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
         |--------------------------------------------------------------------------
         */
         $middleware->alias([
+            // AUTH
+            'auth' => App\Http\Middleware\Authenticate::class,
+
             // PASSPORT
             'scope' => Laravel\Passport\Http\Middleware\CheckToken::class,
             'scopes' => Laravel\Passport\Http\Middleware\CheckTokenForAnyScope::class,

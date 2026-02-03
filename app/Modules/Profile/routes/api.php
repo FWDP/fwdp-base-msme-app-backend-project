@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
          'auth:api',
          'role:ADMIN'
      ])->group(function () {
-         Route::get('/', [AdminProfileController::class, 'index']);
-         Route::get('/{user}', [AdminProfileController::class, 'show']);
+         Route::prefix('profiles')->group(function () {
+             Route::get('/', [AdminProfileController::class, 'index']);
+             Route::get('/{profile}', [AdminProfileController::class, 'show']);
+         });
      });
  });
