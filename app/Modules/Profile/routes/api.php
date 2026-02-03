@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
      ])->group(function () {
          Route::prefix('profiles')->group(function () {
              Route::get('/', [AdminProfileController::class, 'index']);
-             Route::get('/{profile}', [AdminProfileController::class, 'show']);
+             Route::get('/{id}', [AdminProfileController::class, 'show']);
          });
      });
  });
