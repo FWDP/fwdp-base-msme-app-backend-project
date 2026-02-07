@@ -3,6 +3,7 @@
 namespace App\Modules\Courses\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Course extends Model
 {
@@ -13,14 +14,14 @@ class Course extends Model
       'estimated_minutes'
     ];
 
-    public function enrollments()
+    public function enrollments() : HasMany
     {
         return $this->hasMany(CourseEnrollment::class);
     }
 
-    public function lessons()
+    public function lessons() : HasMany
     {
-        return $this->hasMany(Lesson::class)->orderBy('order_index');
+        return $this->hasMany(Lesson::class);
     }
 
     public function calculateProgressForUser(int $userId): float

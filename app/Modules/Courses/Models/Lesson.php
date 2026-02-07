@@ -3,6 +3,7 @@
 namespace App\Modules\Courses\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Lesson extends Model
 {
@@ -17,5 +18,10 @@ class Lesson extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function completions(): HasMany
+    {
+        return $this->hasMany(LessonCompletion::class);
     }
 }

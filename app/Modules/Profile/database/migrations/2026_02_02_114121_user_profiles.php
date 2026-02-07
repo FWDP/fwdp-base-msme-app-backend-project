@@ -15,17 +15,14 @@ return new class extends Migration
         Schema::create('user_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-
             $table->string('first_name')->isNotEmpty();
             $table->string('last_name')->isNotEmpty();
             $table->string('email')->isNotEmpty();
             $table->string('phone')->nullable()->unique();
             $table->string('avatar_url')->nullable();
+            $table->string('avatar_path')->nullable();
             $table->string('gender')->nullable();
-
             $table->timestamps();
-
-            $table->unique(['oauth_provider', 'oauth_uid']);
         });
     }
 

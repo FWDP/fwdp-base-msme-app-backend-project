@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             SubscriptionPlanSeeder::class,
             MsmEUserWithProfileSeeder::class,
             CourseWithLessonsSeeder::class,
+            CourseEnrollmentSimulationSeeder::class
         ]);
     }
 }
