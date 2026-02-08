@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'user_id',
     ];
 
     /**
@@ -49,7 +50,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function profile()
+    public function profile(): \Illuminate\Database\Eloquent\Relations\HasOne|User
     {
         return $this->hasOne(UserProfile::class);
     }

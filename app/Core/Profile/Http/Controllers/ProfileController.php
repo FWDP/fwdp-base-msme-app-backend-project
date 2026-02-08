@@ -13,12 +13,14 @@ class ProfileController extends Controller
     {
         $profile = $request->user()->profile;
 
-        $profile->avatar = $profile->avatar_path;
+        $profile->avatar_url = $profile->avatar_path;
 
         return $profile;
     }
 
-    public function update(Request $request): Request
+    public function update(
+        Request $request,
+    ): Request
     {
         $data = $request->validate([
             'first_name' => 'nullable|string',
@@ -26,8 +28,7 @@ class ProfileController extends Controller
             'phone' => 'nullable|string',
             'avatar_url' => 'nullable|url'
         ]);
-
-        return UserProfile::updateOrCreate(
+        return $request->user()->profile()->updateOrCreate(
             ['user_id' => $request->user()->id],
             $data
         );
@@ -39,15 +40,11 @@ class ProfileController extends Controller
             'avatar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $user = $request->user();
-        $profile = $user->profile;
+        $profile = $request->user()->profile;
 
         $request->validate([
             'avatar' => 'required|image|max:2048', // 2MB
         ]);
-
-        $user = $request->user();
-        $profile = $user->profile;
 
         // delete old avatar if exists
         if ($profile->avatar_path) {
@@ -55,7 +52,7 @@ class ProfileController extends Controller
         }
 
         $path = $request->file('avatar')->store(
-            "avatars/{$user->id}",
+            "avatars/{$request->user()->id}",
             'public'
         );
 

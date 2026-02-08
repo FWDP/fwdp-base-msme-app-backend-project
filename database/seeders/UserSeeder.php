@@ -2,88 +2,82 @@
 
 namespace Database\Seeders;
 
-use App\Core\Profile\Models\UserProfile;
+use App\Core\Auth\Roles;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    public function run(User $user): void
+    public function run(
+        User $user,
+    ): void
     {
-        /*
-        |--------------------------------------------------------------------------
-        | ADMIN USER
-        |--------------------------------------------------------------------------
-        */
-        $admin = $user->updateOrCreate(
-            ['email' => 'admin@msme.local'],
-            [
-                'name'      => 'System Admin',
-                'password'  => Hash::make('admin123'),
-                'role'      => 'ADMIN',
-                'is_active' => true,
-            ]
-        );
+        $user->profile()->truncate();
+        $user->truncate();
 
-        $user->profile()->firstOrCreate(
-            ['user_id' => $admin->id],
+        $usersList = [
             [
-                'first_name' => 'System',
-                'last_name'  => 'Admin',
-                'email'      => 'admin@msme.local',
-                'phone'      => '0918000001',
-            ]
-        );
+                'user' => [
+                    'name' => 'Admin User',
+                    'email' => 'admin@test.com',
+                    'password' => Hash::make('password'),
+                    'role' => Roles::ADMIN,
+                ],
+                'profile' => [
+                    'first_name' => 'Admin',
+                    'last_name' => 'User',
+                    'email' => 'admin@test.com',
+                    'phone' => '09170000001',
+                    'avatar_url' => null,
+                    'avatar_path' => null,
+                    'gender' => 'male',
+                ],
+            ],
+            [
+                'user' => [
+                    'name' => 'Moderator User',
+                    'email' => 'moderator@test.com',
+                    'password' => Hash::make('password'),
+                    'role' => Roles::MODERATOR,
+                ],
+                'profile' => [
+                    'first_name' => 'Moderator',
+                    'last_name' => 'User',
+                    'email' => 'moderator@test.com',
+                    'phone' => '09170000002',
+                    'avatar_url' => null,
+                    'avatar_path' => null,
+                    'gender' => 'male',
+                ],
+            ],
+            [
+                'user' => [
+                    'name' => 'MSME User',
+                    'email' => 'msme@test.com',
+                    'password' => Hash::make('password'),
+                    'role' => Roles::MSME_USER,
+                ],
+                'profile' => [
+                    'first_name' => 'MSME',
+                    'last_name' => 'User',
+                    'email' => 'msme@test.com',
+                    'phone' => '09170000003',
+                    'avatar_url' => null,
+                    'avatar_path' => null,
+                    'gender' => 'female',
+                ],
+            ],
+        ];
 
-        /*
-        |--------------------------------------------------------------------------
-        | MODERATOR USER
-        |--------------------------------------------------------------------------
-        */
-        $moderator = $user->updateOrCreate(
-            ['email' => 'moderator@msme.local'],
-            [
-                'name'      => 'Content Moderator',
-                'password'  => Hash::make('moderator123'),
-                'role'      => 'MODERATOR',
-                'is_active' => true,
-            ]
-        );
-
-        $user->profile()->firstOrCreate(
-            ['user_id' => $moderator->id],
-            [
-                'first_name' => 'Content',
-                'last_name'  => 'Moderator',
-                'email'      => 'moderator@msme.local',
-                'phone'      => '0918000002',
-            ]
-        );
-
-        /*
-        |--------------------------------------------------------------------------
-        | MSME USER
-        |--------------------------------------------------------------------------
-        */
-        $msme = $user->updateOrCreate(
-            ['email' => 'msme@msme.local'],
-            [
-                'name'      => 'MSME Test User',
-                'password'  => Hash::make('msme123'),
-                'role'      => 'MSME_USER',
-                'is_active' => true,
-            ]
-        );
-
-        $user->profile()->firstOrCreate(
-            ['user_id' => $msme->id],
-            [
-                'first_name' => 'MSME',
-                'last_name'  => 'User',
-                'email'      => 'msme@msme.local',
-                'phone'      => '0918000003',
-            ]
-        );
+        foreach ($usersList as $userItem) {
+            $user->updateOrCreate(
+                ['email' => $userItem['user']['email']],
+                $userItem['user']
+            )->profile()->updateOrCreate(
+                ["user_id" => $user->id],
+                $userItem['profile']
+            );
+        }
     }
 }

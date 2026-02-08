@@ -21,16 +21,11 @@ return Application::configure(basePath: dirname(__DIR__))
         */
         $middleware->alias([
             // AUTH
-            'auth' => App\Http\Middleware\Authenticate::class,
-
-            // PASSPORT
-            'scope' => Laravel\Passport\Http\Middleware\CheckToken::class,
-            'scopes' => Laravel\Passport\Http\Middleware\CheckTokenForAnyScope::class,
+            'auth' => \App\Http\Middleware\Authenticate::class,
+            'passport.ready' => \App\Core\Auth\Http\Middleware\EnsurePassportReady::class,
 
             // CUSTOM
-            'role' => App\Http\Middleware\RoleMiddleware::class,
-            'subscription.active' => \App\Http\Middleware\EnsureActiveSubscription::class,
-            'profile.complete' => EnsureUserHasProfile::class,
+            'role' => \App\Core\Auth\Http\Middleware\EnsureRole::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

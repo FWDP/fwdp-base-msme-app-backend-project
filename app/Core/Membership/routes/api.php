@@ -1,6 +1,6 @@
 <?php
 
-use App\Core\Membership\Http\Controllers\AuthController;
+use App\Core\Auth\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AdminPaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
