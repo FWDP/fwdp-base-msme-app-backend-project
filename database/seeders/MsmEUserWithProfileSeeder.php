@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Core\Profile\Models\UserProfile;
 use App\Models\User;
-use App\Modules\Profile\Models\UserProfile;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
