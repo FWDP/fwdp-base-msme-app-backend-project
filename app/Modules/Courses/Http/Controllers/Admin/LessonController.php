@@ -21,7 +21,7 @@ class LessonController extends Controller
             'order_index' => 'required|integer|min:0',
         ]);
 
-        return Lesson::create([
+        return $course->lessons()->create([
             'course_id' => $course->id,
             'title' => $request->title,
             'content' => $request->content,

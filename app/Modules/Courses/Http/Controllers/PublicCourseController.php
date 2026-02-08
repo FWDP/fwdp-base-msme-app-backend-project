@@ -8,18 +8,20 @@ use Illuminate\Http\Request;
 
 class PublicCourseController extends Controller
 {
-    public function index()
+    public function index(Course $course)
     {
-        return Course::where('status', 'published')
-            ->select(['id', 'title','slug','description','estimated_minutes'])
-            ->get();
+        return $course->where('status', 'published')
+            ->get(['id', 'title', 'slug', 'description', 'estimated_minutes']);
     }
 
-    public function show(string $slug, Request $request)
+    public function show(string $slug, Request $request, Course $course)
     {
-        $course = Course::where('slug', $slug)
-            ->where('status', 'published')
-            ->with(['lessons:id,course_id,title,order_index'])
+
+        $course = $course->where([
+                'slug' => $slug,
+                'status', 'published'
+            ])
+            ->with('lessons')
             ->firstOrFail();
 
         $user = $request->user();

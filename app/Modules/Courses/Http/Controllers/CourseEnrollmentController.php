@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 
 class CourseEnrollmentController extends Controller
 {
-    public function enroll(Request $request, Course $course)
+    public function enroll(Request $request,
+                           Course $course)
     {
         $user = $request->user();
 
@@ -20,26 +21,27 @@ class CourseEnrollmentController extends Controller
             ], 403);
         }
 
-        $existing = CourseEnrollment::where([
-           'course_id'  => $course->id,
-           'user_id'    => $user->id,
-        ])->first();
+        $existing = $course->enrollments()
+                ->where([
+                    'course_id' => $course->id,
+                    'user_id', $user->id
+                ])->first();
 
         if ($existing) {
             return response()->json([
                 'message' => 'Course already enrolled.',
                 'course_id' => $course->id,
-                'enroll_date' => $existing->enrolled_at
+                'enroll_date' => $existing->enroll_date
             ]);
         }
 
-        $enrollment = CourseEnrollment::create([
-           'course_id' => $course->id,
-           'user_id'    => $user->id,
-           'enroll_date' => now()
+        $enrollment = $course->enrollments()->create([
+            'course_id' => $course->id,
+            'user_id' => $user->id,
+            'enroll_date' => now()
         ]);
 
-        CourseProgress::firstOrCreate([
+        $course->progress()->firstOrCreate([
             'course_id' => $course->id,
             'user_id' => $user->id,
         ], [

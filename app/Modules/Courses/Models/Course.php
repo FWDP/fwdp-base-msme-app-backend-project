@@ -11,11 +11,15 @@ class Course extends Model
      * @var \Illuminate\Support\HigherOrderCollectionProxy|mixed
      */
     protected $fillable = [
-      'title',
-      'description',
-      "cover_image_url",
-      'status',
-      'estimated_minutes',
+        'title',
+        'description',
+        "cover_image_url",
+        'status',
+        'estimated_minutes',
+        'course_id',
+        'user_id',
+        'percentage',
+        'last_updated_at',
     ];
 
     public function enrollments() : HasMany
@@ -26,6 +30,11 @@ class Course extends Model
     public function lessons() : HasMany
     {
         return $this->hasMany(Lesson::class);
+    }
+
+    public function progress(): HasMany
+    {
+        return $this->hasMany(CourseProgress::class);
     }
 
     public function calculateProgressForUser(int $userId): float

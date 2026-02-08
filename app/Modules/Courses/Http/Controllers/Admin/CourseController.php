@@ -8,21 +8,21 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index(Course $course)
     {
-        return Course::all();
+        return $course->get();
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Course $course)
     {
         $request->validate([
             'title' => 'required|string',
             'description' => 'in:draft|published',
         ]);
 
-        return Course::create($request->only([
+        return $course->create([$request->only([
             'title', 'description', 'status', 'estimated_minutes'
-        ]));
+        ])]);
     }
 
     public function show(Course $course)

@@ -13,10 +13,12 @@ class CourseProgressSummaryController extends Controller
     {
         $userId = $request->user()->id;
 
-        $enrollment = CourseEnrollment::where([
-           'user_id' => $userId,
-           'course_id' => $course->id
-        ]);
+        $enrollment = $course->enrollments()
+            ->where([
+                'user_id', $userId,
+                'course_id' => $course->id
+            ])
+            ->first();
 
         if (! $enrollment) {
             return response()->json([

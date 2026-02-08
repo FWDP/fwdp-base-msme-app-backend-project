@@ -12,7 +12,9 @@ use Illuminate\Http\Request;
 
 class CourseLessonProgressController extends Controller
 {
-    public function complete(Request $request, Lesson $lesson, Course $course)
+    public function complete(Request $request,
+                             Lesson $lesson,
+                             Course $course)
     {
         if ($lesson->course_id != $course->id) {
             return response()->json([
@@ -20,14 +22,14 @@ class CourseLessonProgressController extends Controller
             ], 400);
         }
 
-        LessonCompletion::firstOrCreate([
+        $lesson->completions()->firstOrCreate([
             'lesson_id' => $lesson->id,
             'user_id' => $request->user()->id(),
         ]);
 
         $percentage = $course->calculateProgressForUser($request->user()->id);
 
-        CourseProgress::updateOrCreate(
+        $course->progress()->updateOrCreate(
             [
                 'course_id' => $course->id,
                 'user_id' => $request->user()->id(),
@@ -40,9 +42,9 @@ class CourseLessonProgressController extends Controller
 
         if ($percentage >= 100)
         {
-            CourseEnrollment::where([
-               'course_id' => $course->id,
-               'user_id' => $request->user()->id(),
+            $course->enrollments()->where([
+                'course_id' => $course->id,
+                'user_id' => $request->user()->id(),
             ])->update(['completed_at' => now()]);
         }
 
