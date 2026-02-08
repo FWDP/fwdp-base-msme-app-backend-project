@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    public function run(): void
+    public function run(User $user): void
     {
         /*
         |--------------------------------------------------------------------------
         | ADMIN USER
         |--------------------------------------------------------------------------
         */
-        $admin = User::updateOrCreate(
+        $admin = $user->updateOrCreate(
             ['email' => 'admin@msme.local'],
             [
                 'name'      => 'System Admin',
@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
             ]
         );
 
-        UserProfile::firstOrCreate(
+        $user->profile()->firstOrCreate(
             ['user_id' => $admin->id],
             [
                 'first_name' => 'System',
@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
         | MODERATOR USER
         |--------------------------------------------------------------------------
         */
-        $moderator = User::updateOrCreate(
+        $moderator = $user->updateOrCreate(
             ['email' => 'moderator@msme.local'],
             [
                 'name'      => 'Content Moderator',
@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
             ]
         );
 
-        UserProfile::firstOrCreate(
+        $user->profile()->firstOrCreate(
             ['user_id' => $moderator->id],
             [
                 'first_name' => 'Content',
@@ -66,7 +66,7 @@ class UserSeeder extends Seeder
         | MSME USER
         |--------------------------------------------------------------------------
         */
-        $msme = User::updateOrCreate(
+        $msme = $user->updateOrCreate(
             ['email' => 'msme@msme.local'],
             [
                 'name'      => 'MSME Test User',
@@ -76,7 +76,7 @@ class UserSeeder extends Seeder
             ]
         );
 
-        UserProfile::firstOrCreate(
+        $user->profile()->firstOrCreate(
             ['user_id' => $msme->id],
             [
                 'first_name' => 'MSME',
