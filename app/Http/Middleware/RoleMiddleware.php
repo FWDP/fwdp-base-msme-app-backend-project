@@ -5,6 +5,7 @@ namespace app\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Core\Membership\Contracts\HasRole;
 
 class RoleMiddleware
 {
@@ -13,11 +14,16 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, ...$roles): Response
+    public function handle($request,
+                           Closure $next,
+                           string $roles): Response
     {
-        if (!in_array($request->user()->role, $roles)) {
-            abort(403, 'Unauthorized');
+        if (!$request->user()->hasRole($roles)) {
+            return response()->json([
+                'message' => 'Forbidden',
+            ], Response::HTTP_FORBIDDEN);
         }
+
         return $next($request);
     }
 }

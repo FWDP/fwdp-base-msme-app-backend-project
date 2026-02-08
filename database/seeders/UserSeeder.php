@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Core\Auth\Roles;
+use App\Core\Membership\Enum\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
                     'name' => 'Admin User',
                     'email' => 'admin@test.com',
                     'password' => Hash::make('password'),
-                    'role' => Roles::ADMIN,
+                    'role' => UserRole::ADMIN,
                 ],
                 'profile' => [
                     'first_name' => 'Admin',
@@ -39,7 +39,7 @@ class UserSeeder extends Seeder
                     'name' => 'Moderator User',
                     'email' => 'moderator@test.com',
                     'password' => Hash::make('password'),
-                    'role' => Roles::MODERATOR,
+                    'role' => UserRole::MODERATOR,
                 ],
                 'profile' => [
                     'first_name' => 'Moderator',
@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
                     'name' => 'MSME User',
                     'email' => 'msme@test.com',
                     'password' => Hash::make('password'),
-                    'role' => Roles::MSME_USER,
+                    'role' => UserRole::MSME_USER,
                 ],
                 'profile' => [
                     'first_name' => 'MSME',

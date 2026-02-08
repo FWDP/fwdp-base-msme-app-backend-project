@@ -3,13 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Core\Membership\Contracts\Authenticable;
+use App\Core\Membership\Contracts\HasProfile;
+use App\Core\Membership\Contracts\HasRole;
 use App\Core\Profile\Models\UserProfile;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Authenticable, HasRole, HasProfile
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
@@ -53,5 +56,17 @@ class User extends Authenticatable
     public function profile(): \Illuminate\Database\Eloquent\Relations\HasOne|User
     {
         return $this->hasOne(UserProfile::class);
+    }
+
+    public function getRole(): string
+    {
+        // TODO: Implement getRole() method.
+        return $this->role;
+    }
+
+    public function hasRole(string $role): bool
+    {
+        // TODO: Implement hasRole() method.
+        return $this->role === $role;
     }
 }
