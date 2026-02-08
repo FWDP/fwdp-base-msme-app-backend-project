@@ -4,14 +4,11 @@ namespace App\Modules\Courses\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Courses\Models\Course;
-use App\Modules\Courses\Models\CourseEnrollment;
-use App\Modules\Courses\Models\Lesson;
 use Illuminate\Http\Request;
-use function Pest\Laravel\get;
 
 class CourseLearnerController extends Controller
 {
-    public function index($courseId, Course $course)
+    public function index($courseId, Course $course, Request $request)
     {
         $totalLessons = $course->findOrFail($courseId)
             ->lessons()
@@ -56,6 +53,20 @@ class CourseLearnerController extends Controller
                 ];
             });
 
+        $status = $request->query('status');
+        $search = $request->query('q');
+
+        if ($status) {
+            $enrollments = $enrollments->where('status', $status);
+        }
+
+        if ($search) {
+            $enrollments = $enrollments->filter(function ($enrollment) use ($search) {
+                return str_contains($enrollment['name'], strtolower($search)) ||
+                    str_contains(strtolower($enrollment['email']), strtolower($search));
+            });
+        }
+
         $learnerStats = [
             'not_started' => $enrollments->where('status', 'not started')->count(),
             'in_progress' => $enrollments->where('status', 'in_progress')->count(),
@@ -67,6 +78,7 @@ class CourseLearnerController extends Controller
                 'title' => $course->findOrFail($courseId)->title,
                 'slug' => $course->findOrFail($courseId)->slug,
                 'description' => $course->findOrFail($courseId)->description,
+                'cover_image_url' => $course->findOrFail($courseId)->cover_image_url,
                 'total_lessons' => $totalLessons,
                 'enrollment_count' => $enrollments->count(),
                 'completed_course_count' => $learnerStats['completed'],

@@ -7,11 +7,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Course extends Model
 {
+    /**
+     * @var \Illuminate\Support\HigherOrderCollectionProxy|mixed
+     */
     protected $fillable = [
       'title',
       'description',
+      "cover_image_url",
       'status',
-      'estimated_minutes'
+      'estimated_minutes',
     ];
 
     public function enrollments() : HasMany

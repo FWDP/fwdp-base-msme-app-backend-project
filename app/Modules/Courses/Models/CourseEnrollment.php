@@ -17,6 +17,7 @@ class CourseEnrollment extends Model
         'course_id',
         'user_id',
         'enroll_date',
+        'completed_at',
     ];
 
     public function course(): BelongsTo

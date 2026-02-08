@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Profile\Http\Middleware\EnsureUserHasProfile;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -29,6 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
             // CUSTOM
             'role' => App\Http\Middleware\RoleMiddleware::class,
             'subscription.active' => App\Modules\Membership\Http\Middleware\EnsureActiveSubscription::class,
+            'profile.complete' => EnsureUserHasProfile::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

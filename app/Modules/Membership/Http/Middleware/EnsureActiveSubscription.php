@@ -15,9 +15,9 @@ class EnsureActiveSubscription
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $subscription = $request->user()->activeSubscription;
+        $subscription = $request->user()->is_active;
 
-        if (!$subscription || !$subscription->isActive()) {
+        if (!$subscription) {
             return response()->json([
                 'message' => 'Subscription expired'
             ], 402);

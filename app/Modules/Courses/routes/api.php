@@ -3,6 +3,7 @@
 use App\Modules\Courses\Http\Controllers\Admin\CourseController;
 use App\Modules\Courses\Http\Controllers\Admin\CourseLearnerController;
 use App\Modules\Courses\Http\Controllers\Admin\CourseLessonProgressController;
+use App\Modules\Courses\Http\Controllers\CourseContinueController;
 use App\Modules\Courses\Http\Controllers\CourseEnrollmentController;
 use App\Modules\Courses\Http\Controllers\CourseProgressSummaryController;
 use App\Modules\Courses\Http\Controllers\MyCoursesController;
@@ -29,7 +30,7 @@ Route::prefix('api')->middleware([
  Route::prefix('api')->middleware([
      'auth:api',
      'role:MSME_USER',
-     'susbscription.active',
+     'subscription.active',
      'profile.complete',
  ])->group(function () {
      Route::prefix('courses')->group(function () {
@@ -38,7 +39,13 @@ Route::prefix('api')->middleware([
          Route::post('/{course}/progress', [CourseProgressSummaryController::class, 'show']);
      });
 
-     Route::get("/my-courses", [MyCoursesController::class, 'index']);
+     Route::prefix('my-courses')->group(function () {
+         Route::get("/", [MyCoursesController::class, 'index']);
+
+         Route::middleware('auth:api')->group(function () {
+             Route::get('/continue', [CourseContinueController::class, 'index']);
+         });
+     });
  });
 
  Route::prefix('api')->group(function () {

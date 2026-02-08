@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->string('cover_image_url');
             $table->string('slug');
             $table->enum('status', ['draft', 'published'])->default('draft');
             $table->integer('estimated_minutes')->nullable();
