@@ -8,21 +8,19 @@ use Illuminate\Http\Request;
 
 class AdminProfileController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, User $user)
     {
-        $query = User::with('profile');
-
         // --- Search by user fields ---
         if ($request->filled('q')) {
             $q = $request->q;
 
-            $query->where(function ($builder) use ($q) {
+            $user->with('profile')->where(function ($builder) use ($q) {
                 $builder->where('name', 'like', "%{$q}%")
                     ->orWhere('email', 'like', "%{$q}%");
             });
         }
 
-        return $query->paginate(20);
+        return $user->paginate(20);
     }
 
     public function show(Request $request, $id)
