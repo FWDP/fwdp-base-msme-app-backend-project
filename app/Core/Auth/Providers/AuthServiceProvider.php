@@ -18,8 +18,8 @@ class AuthServiceProvider extends ServiceProvider
         ]);
     }
 
-    function register()
+    function register(): void
     {
-        //
+        $this->loadRoutesFrom(base_path()."/app/Core/Auth/routes/api.php");
     }
 }

@@ -3,16 +3,37 @@
 namespace App\Core\Auth\Http\Controllers;
 
 use App\Core\Auth\Services\PassportService;
+use App\Core\Membership\Enum\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Hash;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(
+        Request $request,
+        User $user,
+    )
     {
+        $data = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|confirmed',
+        ]);
 
+        $userData = $user->create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => UserRole::MSME_USER->value,
+        ]);
+
+        return response()->json([
+            'user' => $user,
+            'token' => $user->createToken('auth_token')->accessToken,
+        ]);
     }
 
     /**
