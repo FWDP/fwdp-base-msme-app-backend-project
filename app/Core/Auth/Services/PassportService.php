@@ -6,29 +6,27 @@ use App\Models\User;
 use Http;
 use Illuminate\Http\Client\ConnectionException;
 use Laravel\Passport\Client;
+use Laravel\Passport\Token;
 
 class PassportService
 {
-    /**
-     * @throws ConnectionException
-     */
-    public function issueToken(
-        User $user,
-        string $password
-    )
+    public function createPersonalAccessToken(User $user, string $name='auth_token'): string
     {
-        return Http::asForm()->post('oauth/token', [
-            'grant_type' => 'password',
-            'client_id' => Client::where('password_client', 1)->first()->id,
-            'client_secret' => Client::where('password_client', 1)->first()->secret,
-            'username' => $user->email,
-            'password' => $password,
-            'scope' => '',
-        ])->json();
+        return $user->createToken($name)->accessToken;
     }
 
-    public function revokeAllTokens(User $user): void
+    public function revokeAllTokens(User $user, Token $token): void
     {
-        $user->tokens()->delete();
+        $token->where('user_id', $user->id)->delete();
+    }
+
+    public function revokeCurrentToken(User $user): void
+    {
+        $user->token()->revoke();
+    }
+
+    public function createPasswordGrantToken(User $user, string $name='password_grant'): string
+    {
+        return $user->createToken($name)->accessToken;
     }
 }

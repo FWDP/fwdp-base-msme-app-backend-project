@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Core\Membership\Contracts\Authenticable;
 use App\Core\Membership\Contracts\HasProfile;
 use App\Core\Membership\Contracts\HasRole;
@@ -40,18 +39,10 @@ class User extends Authenticatable implements Authenticable, HasRole, HasProfile
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
     public function profile(): \Illuminate\Database\Eloquent\Relations\HasOne|User
     {
