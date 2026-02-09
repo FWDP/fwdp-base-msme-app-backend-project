@@ -6,6 +6,8 @@ use App\Core\Membership\Contracts\Authenticable;
 use App\Core\Membership\Contracts\HasProfile;
 use App\Core\Membership\Contracts\HasRole;
 use App\Core\Profile\Models\UserProfile;
+use App\Core\Subscriptions\Models\Subscription;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -43,6 +45,11 @@ class User extends Authenticatable implements Authenticable, HasRole, HasProfile
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
 
     public function profile(): \Illuminate\Database\Eloquent\Relations\HasOne|User
     {

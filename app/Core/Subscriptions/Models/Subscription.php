@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Core\Subscriptions\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -9,15 +10,15 @@ class Subscription extends Model
 {
     protected $fillable = [
         'user_id',
-        'plan_id',
+        'subscription_plan_id',
         'status',
         'start_date',
         'end_date',
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date'   => 'date',
+        'start_date' => 'datetime',
+        'end_date'   => 'datetime',
     ];
 
     /*
@@ -33,7 +34,7 @@ class Subscription extends Model
 
     public function plan(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(SubscriptionPlan::class, 'plan_id');
+        return $this->belongsTo(SubscriptionPlan::class, 'subscription_plan_id');
     }
 
     /*

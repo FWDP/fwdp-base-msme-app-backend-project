@@ -26,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
             // CUSTOM
             'role' => \App\Core\Auth\Http\Middleware\EnsureRole::class,
+            'subscription.active' => \App\Core\Subscriptions\Http\Middleware\EnsureActiveSubscription::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
