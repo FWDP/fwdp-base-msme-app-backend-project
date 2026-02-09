@@ -14,9 +14,12 @@ class EnsureActiveSubscription
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, Subscription $subscription): Response
     {
-        $subscription = Subscription::query()->where('user_id', $request->user()->id)->latest()->first();
+        $subscription = $subscription->query()
+            ->where('user_id', $request->user()->id)
+            ->latest()
+            ->first();
 
         if (!$subscription || !$subscription->isActive()) {
             return response([])->json(

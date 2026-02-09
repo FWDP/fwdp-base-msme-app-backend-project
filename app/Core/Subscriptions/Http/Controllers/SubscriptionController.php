@@ -23,7 +23,7 @@ class SubscriptionController extends Controller
     public function plans(SubscriptionPlan $subscriptionPlan)
     {
         return response()->json([
-            'plans' => $subscriptionPlan->toArray()
+            'plans' => $subscriptionPlan->newQuery()->get()
         ]);
     }
 }
