@@ -29,6 +29,10 @@ class User extends Authenticatable implements Authenticable, HasRole, HasProfile
         'password',
         'role',
         'user_id',
+        'subscription_plan_id',
+        'status',
+        'start_date',
+        'end_date',
     ];
 
     /**
@@ -45,6 +49,11 @@ class User extends Authenticatable implements Authenticable, HasRole, HasProfile
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
 
     public function subscriptions(): HasMany
     {

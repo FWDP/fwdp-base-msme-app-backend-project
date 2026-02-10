@@ -2,8 +2,10 @@
 
 namespace App\Core\Subscriptions\Models;
 
+use App\Core\Payments\Models\Payment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 class Subscription extends Model
@@ -32,9 +34,14 @@ class Subscription extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function plan(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function subscription_plan(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(SubscriptionPlan::class, 'subscription_plan_id');
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 
     /*
