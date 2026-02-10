@@ -47,5 +47,9 @@ return [
         'redirect' => env('LINKEDIN_REDIRECT_URI'),
     ],
 
+    'paymongo' => [
+        'key' => env('PAYMONGO_SECRET_KEY'),
+        'base'=> env('PAYMONGO_BASE'),
+    ]
 
 ];
