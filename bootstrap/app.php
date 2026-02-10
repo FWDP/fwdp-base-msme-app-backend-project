@@ -13,12 +13,6 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-
-        /*
-        |--------------------------------------------------------------------------
-        | Middleware Aliases (THIS IS THE IMPORTANT PART)
-        |--------------------------------------------------------------------------
-        */
         $middleware->alias([
             // AUTH
             'auth' => \App\Http\Middleware\Authenticate::class,

@@ -4,6 +4,7 @@ namespace App\Core\Auth\Http\Controllers;
 
 use App\Core\Auth\Services\PassportService;
 use App\Core\Membership\Enum\UserRole;
+use App\Core\Subscriptions\Services\SubscriptionBootstrapper;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Hash;
@@ -13,8 +14,11 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
     protected PassportService $passportService;
+    protected SubscriptionBootstrapper $subscriptionBootstrapper;
 
-    public function __construct(PassportService $passportService)
+    public function __construct(
+        PassportService $passportService,
+    )
     {
         $this->passportService = $passportService;
     }
@@ -36,6 +40,8 @@ class AuthController extends Controller
             'password' => Hash::make($data['password']),
             'role' => UserRole::MSME_USER->value,
         ]);
+
+        $this->subscriptionBootstrapper->createTrialFor($user);
 
         return response()->json([
             'user' => $user,

@@ -62,22 +62,13 @@ class Subscription extends Model
     /**
      * Mark subscription as expired
      */
-    public function expire(): void
+    public function isExpired(): bool
     {
-        $this->update([
-            'status' => 'expired',
-        ]);
+        return $this->end_date !== null && now()->gt($this->end_date);
     }
 
-    /**
-     * Activate subscription (admin action)
-     */
-    public function activate(int $durationDays): void
+    public function expire() : void
     {
-        $this->update([
-            'status'     => 'active',
-            'start_date' => now(),
-            'end_date'   => now()->addDays($durationDays),
-        ]);
+        $this->update(['status'  => 'expired']);
     }
 }

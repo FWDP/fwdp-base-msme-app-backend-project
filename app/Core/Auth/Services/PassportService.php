@@ -3,9 +3,6 @@
 namespace App\Core\Auth\Services;
 
 use App\Models\User;
-use Http;
-use Illuminate\Http\Client\ConnectionException;
-use Laravel\Passport\Client;
 use Laravel\Passport\Token;
 
 class PassportService

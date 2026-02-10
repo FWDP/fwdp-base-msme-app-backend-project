@@ -38,6 +38,29 @@ class PaymentController extends Controller
             'end_date' => now()->addDays($subscriptionPlan->newQuery()->value('duration_days')),
         ]);
 
+        $gatewaySuccess = true;
+
+        if ($gatewaySuccess) {
+            $payment->update([
+                'status'  => 'success',
+                'provider_reference' => 'TEST'.uniqid(),
+            ]);
+
+            $latestSubscription->update([
+                'subscription_plan_id' => $subscriptionPlan->newQuery()->findOrFail($request->validate([
+                    'subscription_plan_id' => 'required|exists:subscription_plans,id',
+                ])['subscription_plan_id'])->value('id'),
+                'status' => 'active',
+                'start_date' => now(),
+                'end_date' =>  now()->addDays($subscriptionPlan->newQuery()->value('duration_days')),
+            ]);
+        }
+        else {
+            $payment->update([
+                'status'  => 'failed',
+            ]);
+        }
+
         return response()->json([
             'status' => 'Payment successful',
             'payment' => $payment->newQuery()
