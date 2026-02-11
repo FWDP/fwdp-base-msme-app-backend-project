@@ -4,7 +4,10 @@ namespace App\Console\Commands;
 
 use App\Support\ModuleRegistry;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class ModuleDisable extends Command
 {
@@ -30,7 +33,7 @@ class ModuleDisable extends Command
         if (ModuleRegistry::isCore($this->argument('module'))) {
             $this->error("You cannot disable core module [{$this->argument('module')}]");
             $this->warn("Core modules are required for platform to function.");
-            return Command::FAILURE;
+            return CommandAlias::FAILURE;
         }
 
         DB::table('modules')
@@ -39,6 +42,45 @@ class ModuleDisable extends Command
 
         $this->info("Module [{$this->argument('module')}] successfully disabled.");
 
-        return Command::SUCCESS;
+//        Artisan::call('module:rollback', ['module' => $this->argument('module')]);
+
+        $this->removeProviderFromBootstrap($this->argument('module'));
+
+        return CommandAlias::SUCCESS;
+    }
+    public function removeProviderFromBootstrap(string $slug): void
+    {
+        $studly = Str::studly($slug);
+
+        $providerLine = match (true) {
+            is_dir(app_path("Modules/{$studly}/Providers"))
+            =>"App\\Modules\\{$studly}\\Providers\\{$studly}ServiceProvider::class",
+            default => null
+        };
+
+        if (!$providerLine){
+            $this->warn("No matching ServiceProvider found for [{$studly}] - skipping.");
+        }
+
+        if (!Str::contains(file_get_contents(base_path("bootstrap/providers.php")), $providerLine)) {
+            $this->info("Provider nor present - nothing to remove.");
+        }
+
+        $escapeProvider = preg_quote($providerLine, "/");
+
+        $contents =  preg_replace("/\s*{$escapeProvider}\s*,?\s*\n/","",
+            file_get_contents(base_path("bootstrap/providers.php"))
+        );
+
+        file_put_contents(base_path(
+            "bootstrap/providers.php"),
+            preg_replace(
+                "/(App\\\\[^n]+ServiceProvider::class),\s*];$/m",
+                "$1\n];",
+               $contents
+            )
+        );
+
+        $this->info("Provider [{$this->argument('module')}] successfully removed.");
     }
 }

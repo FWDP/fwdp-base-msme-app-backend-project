@@ -36,14 +36,24 @@ class ModuleRollback extends Command
 
         $this->info("Rolling back module...");
         $studly = Str::studly($this->argument('module'));
-        Artisan::call('migrate:rollback', [
-            '--path' => str_replace(base_path(), '',
-                app_path("Modules/$studly/database/migrations"))],
-            ['--force' => true]
-        );
+
+        if (is_dir(app_path("Modules\\{$studly}\database\migrations")))
+        {
+            Artisan::call('migrate:rollback', [
+                '--path' => "app\\Modules\\$studly\\database\\migrations",
+                '--force' => true
+            ]);
+
+            $this->line(Artisan::output());
+
+            $this->info("Migration for module [{$studly}] successfully executed.");
+        } else {
+            $this->info("No module-specific migration found. ");
+        }
 
         $this->info("Migrations rollback completed.");
 
         return CommandAlias::SUCCESS;
     }
+
 }
