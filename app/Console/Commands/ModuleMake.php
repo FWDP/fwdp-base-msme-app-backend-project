@@ -15,7 +15,7 @@ class ModuleMake extends Command
      *
      * @var string
      */
-    protected $signature = 'module:make {name : The name of the module}';
+    protected $signature = 'make:module {name : The name of the module}';
 
     /**
      * The console command description.
