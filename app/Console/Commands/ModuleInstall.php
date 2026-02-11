@@ -42,21 +42,56 @@ class ModuleInstall extends Command
 
         $this->info("Module [{$this->argument('module')}] successfully enabled.");
 
+        $this->registerProviderInBootstrap($this->argument('module'));
+
         $studly = Str::studly($this->argument('module'));
 
-        if (is_dir(app_path("Modules/{$studly}/database/migrations")))
+
+        if (is_dir(app_path("Modules\\{$studly}\database\migrations")))
         {
             Artisan::call('migrate', [
-               '--path' => app_path("Modules/{$studly}/database/migrations"),
-               '--force' => true,
+                '--path' => "app\\Modules\\{$studly}\\database\\migrations",
+                '--force' => true,
             ]);
+
+            $this->line(Artisan::output());
 
             $this->info("Migration for module [{$studly}] successfully executed.");
         } else {
-            Artisan::call('migrate', ['--force' => true]);
             $this->info("No module-specific migration found. ");
         }
 
         return CommandAlias::SUCCESS;
+    }
+
+    public function registerProviderInBootstrap(string $slug): void
+    {
+        $studly = Str::studly($slug);
+
+        $providerLine = "App\\Modules\\{$studly}\\Providers\\{$studly}ServiceProvider::class";
+
+        $providerFile = base_path('bootstrap\providers.php');
+
+        if (str_contains(file_get_contents($providerFile), $providerLine)) {
+            $this->line("Provider already registered: {$providerLine}");
+            return;
+        }
+
+        $normaliseContent = preg_replace(
+            '/(App\\\\[^\n]+ServiceProvider::class)\s*];$/m',
+            "$1,\n];",
+            file_get_contents($providerFile)
+        );
+
+        file_put_contents(
+            $providerFile,
+            preg_replace(
+                '/];\s*$/',
+                "\t$providerLine\n];",
+                $normaliseContent
+            )
+        );
+
+        $this->info("Provider [{$studly}] successfully registered.");
     }
 }
