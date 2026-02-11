@@ -42,7 +42,7 @@ class ModuleDisable extends Command
 
         $this->info("Module [{$this->argument('module')}] successfully disabled.");
 
-//        Artisan::call('module:rollback', ['module' => $this->argument('module')]);
+        Artisan::call('module:rollback', ['module' => $this->argument('module')]);
 
         $this->removeProviderFromBootstrap($this->argument('module'));
 
@@ -63,24 +63,24 @@ class ModuleDisable extends Command
         }
 
         if (!Str::contains(file_get_contents(base_path("bootstrap/providers.php")), $providerLine)) {
-            $this->info("Provider nor present - nothing to remove.");
+            $this->info("Provider not present - nothing to remove.");
+        } else {
+            $escapeProvider = preg_quote($providerLine, "/");
+
+            $contents =  preg_replace("/\s*{$escapeProvider}\s*,?\s*\n/","",
+                file_get_contents(base_path("bootstrap/providers.php"))
+            );
+
+            file_put_contents(base_path(
+                "bootstrap/providers.php"),
+                preg_replace(
+                    "/(App\\\\[^n]+ServiceProvider::class),\s*];$/m",
+                    "$1\n];",
+                    $contents
+                )
+            );
+
+            $this->info("Provider [{$this->argument('module')}] successfully removed.");
         }
-
-        $escapeProvider = preg_quote($providerLine, "/");
-
-        $contents =  preg_replace("/\s*{$escapeProvider}\s*,?\s*\n/","",
-            file_get_contents(base_path("bootstrap/providers.php"))
-        );
-
-        file_put_contents(base_path(
-            "bootstrap/providers.php"),
-            preg_replace(
-                "/(App\\\\[^n]+ServiceProvider::class),\s*];$/m",
-                "$1\n];",
-               $contents
-            )
-        );
-
-        $this->info("Provider [{$this->argument('module')}] successfully removed.");
     }
 }
