@@ -27,7 +27,7 @@ class ModuleMake extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $name = Str::studly($this->argument('name'));
         $slug = Str::slug($name);

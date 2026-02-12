@@ -30,7 +30,7 @@ class ModuleInstall extends Command
     public function handle()
     {
         DB::table('modules')
-            ->where('name', $this->argument('module'))
+            ->where('name', Str::lower($this->argument('module')))
             ->updateOrInsert(
                 ['name' => $this->argument('module')],
                 [

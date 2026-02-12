@@ -37,7 +37,7 @@ class ModuleDisable extends Command
         }
 
         DB::table('modules')
-            ->where('name', $this->argument('module'))
+            ->where('name', Str::lower($this->argument('module')))
             ->update(['enabled' => false]);
 
         $this->info("Module [{$this->argument('module')}] successfully disabled.");
