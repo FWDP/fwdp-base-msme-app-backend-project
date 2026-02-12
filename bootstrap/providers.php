@@ -7,4 +7,5 @@ return [
     App\Core\Subscriptions\Providers\SubscriptionsServiceProvider::class,
     App\Core\Payments\Providers\PaymentServiceProvider::class,
     App\Core\Admin\Providers\AdminServiceProvider::class,
+	App\Modules\Notifications\Providers\NotificationsServiceProvider::class
 ];
